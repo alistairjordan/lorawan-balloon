@@ -1,0 +1,5 @@
+config SX1278
+tristate "Semtec sx1278 support"
+default y
+help
+  Semtec sx1278 Support for file-ops

@@ -27,6 +27,7 @@
 #include <linux/netdevice.h>
 
 /* ARP protocol HARDWARE identifiers. */
+#define ARPHRD_LORAWAN	830		/* LoRaWAN header		*/
 #define ARPHRD_NETROM	0		/* from KA9Q: NET/ROM pseudo	*/
 #define ARPHRD_ETHER 	1		/* Ethernet 10Mbps		*/
 #define	ARPHRD_EETHER	2		/* Experimental Ethernet	*/
