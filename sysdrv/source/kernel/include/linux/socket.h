@@ -223,7 +223,7 @@ struct ucred {
 				 * reuses AF_INET address family
 				 */
 #define AF_XDP		44	/* XDP sockets			*/
-
+#define AF_LORAWAN	44	/* LoRaWAN sockets		*/
 #define AF_MAX		45	/* For now.. */
 
 /* Protocol families, same as address families. */
@@ -275,6 +275,7 @@ struct ucred {
 #define PF_SMC		AF_SMC
 #define PF_XDP		AF_XDP
 #define PF_MAX		AF_MAX
+#define PF_LORAWAN	AF_LORAWAN
 
 /* Maximum queue length specifiable by listen.  */
 #define SOMAXCONN	4096
@@ -360,6 +361,7 @@ struct ucred {
 #define SOL_KCM		281
 #define SOL_TLS		282
 #define SOL_XDP		283
+#define SOL_LORAWAN	284
 
 /* IPX options */
 #define IPX_TYPE	1

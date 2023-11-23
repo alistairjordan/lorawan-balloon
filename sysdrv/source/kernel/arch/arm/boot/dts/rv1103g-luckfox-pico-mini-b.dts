@@ -87,6 +87,14 @@
 		compatible = "rockchip,spidev";
 		spi-max-frequency = <1000000000>;
 		reg = <0>;
+		status = "disabled";
+	};
+	sx1278@0 {
+		compatible = "sx1278";
+		reg = <0>;
+		status = "okay";
+		spi-max-frequency = <0x3b60>;
+		clock-frequency = <32000000>;
 	};
 };
 
@@ -180,7 +188,7 @@
 &pinctrl {
     gpio1-pd0 {
         gpio1_pd0:gpio1-pd0 {
-            rockchip,pins = <1 RK_PC7 RK_FUNC_GPIO &pcfg_pull_none>;
+            rockchip,pins = <1 RK_PC7 RK_FUNC_GPIO &pcfg_pull_down>;
         };
     };
 };
