@@ -14,7 +14,7 @@ PKG_BIN := out
 
 M_OUT_DIR := $(CURRENT_DIR)/$(PKG_BIN)
 export M_OUT_DIR
-M_DIRS := rockit kmpp wifi motor sx1276
+M_DIRS := rockit kmpp wifi motor sx1276 lorawan
 ################################################################################
 ##  build target
 ################################################################################

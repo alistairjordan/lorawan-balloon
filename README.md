@@ -77,5 +77,6 @@ The initial prototype can be seen in the image below.
 * It boots into linux and doesn't blow up.
 * DTS Updated for correct pin attribution 
 * GPS Works
-* Lora works, LoraWan not
+* Starnights LoraWan module upgraded to work with Linux 5.10
+* Lora and LoraWan Kernel Modules Building & Inserting
 * Basically the entire code base is missing.

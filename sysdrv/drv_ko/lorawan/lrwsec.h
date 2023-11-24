@@ -54,4 +54,18 @@ int lrw_decrypt_buf(struct crypto_skcipher *tfm,
 		    u8 dir, u8 *devaddr, u32 fcnt, u8 *buf, size_t len);
 void lrw_encrypt_key_free(struct crypto_skcipher *tfm);
 
+/*
+#define SKCIPHER_REQUEST_ON_STACK(name, tfm) \
+	char __##name##_desc[sizeof(struct skcipher_request) + \
+		crypto_skcipher_reqsize(tfm)] CRYPTO_MINALIGN_ATTR; \
+	struct skcipher_request *name = (void *)__##name##_desc
+*/
+
+#define SKCIPHER_MAX_REQSIZE	472
+
+#define SKCIPHER_REQUEST_ON_STACK(name, tfm) \
+char __##name##_desc[sizeof(struct skcipher_request) + \
+	SKCIPHER_MAX_REQSIZE] CRYPTO_MINALIGN_ATTR; \
+struct skcipher_request *name = (void *)__##name##_desc
+ 
 #endif

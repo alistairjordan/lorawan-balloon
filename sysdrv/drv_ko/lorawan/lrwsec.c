@@ -155,7 +155,7 @@ lrw_aes_enc(struct crypto_skcipher *tfm, u8 *in, size_t len, u8 *out)
 {
 	u8 iv[16];
 	struct scatterlist src, dst;
-	SYNC_SKCIPHER_REQUEST_ON_STACK(req, tfm);
+	SKCIPHER_REQUEST_ON_STACK(req, tfm);
 	int err;
 
 	memset(iv, 0, 16);

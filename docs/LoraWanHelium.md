@@ -18,5 +18,5 @@ _Overall_ - there are two choices.
 
 The former, while a PITA initially, actually provides what initially appears to be an easy to use interface to Lora, with functions such as spreading factor, band etc all controllable using ioctl calls.
 
-The solution here will likely be to create the MAC "Driver" in userland. Should it be there? Absolutely not. (But, once again future improvement, otherwise the project will never get finished.)
+It appears that Starnight has also produced a LoraWan driver, which is currently written for the 4.11 kernel, which needs updating to the current kernel and testing.
 
