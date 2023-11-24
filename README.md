@@ -79,5 +79,6 @@ The initial prototype can be seen in the images below.
 * It boots into linux and doesn't blow up.
 * DTS Updated for correct pin attribution 
 * GPS Works
+* CI/CD Works
 * Lora works, LoraWan not
 * Basically the entire code base is missing.
