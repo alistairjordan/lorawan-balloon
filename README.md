@@ -68,9 +68,11 @@ I have placed design thoughts within the ./doc directory within this repository.
 
 ## Initial Prototype
 
-The initial prototype can be seen in the image below.
+The initial prototype can be seen in the images below.
 
 ![Prototype](./docs/images/prototype.jpg)
+![Prototype](./docs/images/schematic.jpg)
+
 
 # Project status
 
