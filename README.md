@@ -54,6 +54,8 @@ This design decision has been made for the following reasons:
 
 Generally modern GPS modules are simply UART based, use similar chipsets and have essentially all become unified since they became integrated into smartphones. I didn't take much bother into researching this one. They should in theory neary all just be hotswappable.
 
+*Update*: No, no they are not. Added gpsd as a common interface.
+
 #### Camera Module
 
 This one needs research. I just picked the smallest, lightest camera I had on hand (It came from a ESP32 kit). Might not be the best solution power wise. This section might need an update.
