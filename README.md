@@ -60,6 +60,8 @@ Generally modern GPS modules are simply UART based, use similar chipsets and hav
 
 This one needs research. I just picked the smallest, lightest camera I had on hand (It came from a ESP32 kit). Might not be the best solution power wise. This section might need an update.
 
+*Update, who uses a 20 Pin non-conformant MIPI/CSI interface on a dev board?!? Luckfox.. Otherwise the best dev board i've ever worked with :/
+
 ## Notes on design documentation and Source code
 
 The linux module used as the central processor is based on the LuckyFox Pico Mini B. Hence the basis of this git repository is a fork of their SDK for ease of updating any bug fixes for the board. Where there have been significant code changes, the README.md from LuckyFox have been renamed with a _luckyfox.md appendage. 
