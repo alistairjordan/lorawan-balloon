@@ -85,4 +85,5 @@ The initial prototype can be seen in the images below.
 * GPS Works, gpsd installed.
 * CI/CD Works
 * Lora works, LoraWan not
+* I2C working with Si5351 WSPR, WSPR not
 * Basically the entire code base is missing.
