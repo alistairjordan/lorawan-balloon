@@ -74,29 +74,42 @@
 	clock-frequency = <100000>;
 };
 
-// /**********SPI**********/
-&spi0 {
-	status = "okay";
-	pinctrl-names = "default";
-	pinctrl-0 = <&spi0m0_pins>;
-	cs-gpios = <&gpio1 RK_PC0 1>;
-	// cs-gpios = <&gpio1 RK_PD3 1>;
-	#address-cells = <1>;
-	#size-cells = <0>;
-	spidev@0 {
-		compatible = "rockchip,spidev";
-		spi-max-frequency = <1000000000>;
-		reg = <0>;
-		status = "disabled";
-	};
-	sx1278@0 {
-		compatible = "sx1278";
-		reg = <0>;
-		status = "okay";
-		spi-max-frequency = <0x3b60>;
-		clock-frequency = <32000000>;
-	};
+&pinctrl {
+    i2c3 {
+        /omit-if-no-ref/
+        i2c3m1_xfer: i2c3m1-xfer {
+            rockchip,pins =
+                /* i2c3_scl_m1 */
+                <1 RK_PD3 3 &pcfg_pull_up>,
+                /* i2c3_sda_m1 */
+                <1 RK_PD2 3 &pcfg_pull_up>;
+        };  
+    };
 };
+
+// /**********SPI**********/
+// &spi0 {
+//	status = "okay";
+//	pinctrl-names = "default";
+//	pinctrl-0 = <&spi0m0_pins>;
+//	cs-gpios = <&gpio1 RK_PC0 1>;
+//	// cs-gpios = <&gpio1 RK_PD3 1>;
+//	#address-cells = <1>;
+//	#size-cells = <0>;
+//	spidev@0 {
+//		compatible = "rockchip,spidev";
+//		spi-max-frequency = <1000000000>;
+//		reg = <0>;
+//		status = "disabled";
+//	};
+//	sx1278@0 {
+//		compatible = "sx1278";
+//		reg = <0>;
+//		status = "okay";
+//		spi-max-frequency = <0x3b60>;
+//		clock-frequency = <32000000>;
+//	};
+//};
 
 /**********UART**********/
 &uart2 {
