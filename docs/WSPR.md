@@ -12,8 +12,16 @@ For use the protocol requires an amateur radio license. For this project, I have
 
 ## Base Design
 
+### Code
+
 The project is based on [https://github.com/alexf91/WSPR-Beacon/]alexf91/WSPR-Beacon however has been completely rewritten.
 
-The initial code was designed for an Arduino based solution with a USB interface. The re-write disregards the code apart from the WSPR encoding library.
+The initial code was designed for an Arduino based solution with a USB interface. The re-write here disregards the code apart from the WSPR encoding library.
 
-A special mention here is [https://github.com/threeme3/WsprryPi]threeme3/WsprryPi
+A special mention here is [https://github.com/threeme3/WsprryPi]threeme3/WsprryPi. I's not used in this project, but was vastly helpful for design purposes. 
+
+### Electronics
+
+The WSPR part of the project requires an oscillator to function at around 14MHz. 
+
+For this it was chosen to use the si5351, for the good community support, and the ease of the i2c interface.
