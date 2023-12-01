@@ -12,7 +12,7 @@ PKG_NAME := wspr
 PKG_BIN := out
 
 all:
-	@test -f $(PKG_BIN)/usr/sbin/$(PKG_NAME) || (\
+	@test -f $(PKG_BIN)/usr/sbin/$(PKG_NAME)_noexist || (\
 	mkdir -p $(CURRENT_DIR)/$(PKG_BIN)/usr/sbin; \
 	gcc main.c wspr.c -o $(CURRENT_DIR)/$(PKG_BIN)/usr/sbin/$(PKG_NAME); \
 	)

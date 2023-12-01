@@ -18,8 +18,14 @@
  #include <stddef.h>
  #include <stdint.h>
  #include <string.h>
+ #include <time.h>
+ #include <stdlib.h>
  #include "wspr.h"
- #include "si5351_linux.h"
+
+ #define BASE_FREQ_LOW     14097000
+ // high is end of 200hz spectrum - 6 hz to take account for transmission.
+ // Useful docs here: https://www.qrp-labs.com/images/ultimate3s/operation3.11.pdf
+ #define BASE_FREQ_HIGH     14097194
 
 /**
  * @brief Convert GPS coordinates into the 6 character grid locator.
@@ -60,21 +66,49 @@ static int8_t gps_to_grid(char *grid, int32_t lon, int32_t lat) {
     return 0;
 }
 
-int init_wspr() {
+int init_wspr(FILE *fen, FILE *ffreq, char *clk) {
+    fen = (fopen("/proc/clk/enable", "w"));
+    if(fen == NULL)
+    {
+       printf("Error opening /proc/clk/enable!");
+       return 1;
+    }
+    ffreq = (fopen("/proc/clk/rate", "w"));
+    if(ffreq == NULL)
+    {
+       printf("Error opening /proc/clk/rate!");
+       return 1;
+    }
+    // enable clk0
+    //echo enable [clk_name] > /proc/clk/enable
+    fprintf(fen,"enable %s", clk);
     return 0;
 }
 
-int send_tone() {
+int send_tone(uint32_t base_freq, char *data, int index, FILE *ffreq, char *clk) {
+    // set freq
+    // echo [clk_name] [rate(Hz)] > /proc/clk/rate
+    uint8_t tone = wspr_get_tone(data, index);
+    uint32_t f = base_freq + (3 * tone) / 2;
+    fprintf(ffreq,"rate %s %i", clk, f);
     return 0;
 }
 
-int stop_wspr() {
+int stop_wspr(FILE *fen, FILE *ffreq, char *clk) {
+    //disable clk0
+    // echo disable [clk_name] > /proc/clk/enable
+    fprintf(fen,"disable %s", clk);
+    fclose(fen);
+    fclose(ffreq);
     return 0;
 }
 
  int main() {
+    FILE *fen;
+    FILE *ffreq;
     char grid[6];
     char callsign[6] = "2X0UAJ";
+    char clk_name[4] = "clk0";
     int32_t lon = 0;
     int32_t lat = 0;
     uint8_t wspr_data[WSPR_BUFFER_SIZE];
@@ -88,20 +122,30 @@ int stop_wspr() {
         return 1;
     }
 
+    // Decide base frequency for transmission
+    srand(time(NULL));
+    uint32_t base_freq = BASE_FREQ_LOW + (rand() % (BASE_FREQ_HIGH - BASE_FREQ_LOW)); 
+
     // Start transmit
-    if (init_wspr() != 0) {
-        printf("si5351 unable to init!");
+    if (init_wspr(fen, ffreq, clk_name) != 0) {
+        printf("%s unable to init!", clk_name);
         return 1;
     }
     for (int i=0; i < WSPR_BUFFER_SIZE; i++) {
-        if (send_tone() != 0) {
+        clock_t before = clock();
+        if (send_tone(base_freq, wspr_data, i, ffreq, clk_name) != 0) {
             printf("Transmit failure");
             break;
         }
+        do {
+
+        } while (clock() - before < WSPR_SYMBOL_TIME);
     }
-    if (stop_wspr() != 0) {
+    if (stop_wspr(fen, ffreq, clk_name) != 0) {
         printf("Disconnect device immediately!");
         return 2;
     }
+
+    printf("Transmission Complete");
 
 }
