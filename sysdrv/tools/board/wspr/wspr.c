@@ -179,11 +179,10 @@ int wspr_encode(uint8_t *result, const char *call, const char *loc, int power) {
     }
 
 //#ifdef DEBUG
-    print_vector("Data symbols", result);
-    printf("\n");
-    print_vector("Sync symbols", sync_vector);
+    //print_vector("Data symbols", result);
+    //printf("\n");
+    //print_vector("Sync symbols", sync_vector);
 //#endif
-
     return 0;
 }
 

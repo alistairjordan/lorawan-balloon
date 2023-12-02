@@ -66,40 +66,44 @@ static int8_t gps_to_grid(char *grid, int32_t lon, int32_t lat) {
     return 0;
 }
 
-int init_wspr(FILE *fen, FILE *ffreq, char *clk) {
-    fen = (fopen("/proc/clk/enable", "w"));
-    if(fen == NULL)
+int init_wspr(FILE **fen, FILE **ffreq, char *clk) {
+    *fen = (fopen("/proc/clk/enable", "w"));
+    if(*fen == NULL)
     {
-       printf("Error opening /proc/clk/enable!");
+       printf("Error opening /proc/clk/enable!\n");
        return 1;
     }
-    ffreq = (fopen("/proc/clk/rate", "w"));
-    if(ffreq == NULL)
+    *ffreq = (fopen("/proc/clk/rate", "w"));
+    if(*ffreq == NULL)
     {
-       printf("Error opening /proc/clk/rate!");
+       printf("Error opening /proc/clk/rate!\n");
        return 1;
     }
     // enable clk0
     //echo enable [clk_name] > /proc/clk/enable
-    fprintf(fen,"enable %s", clk);
+    printf("enable %s", clk);
+    fprintf(*fen,"enable %s", clk);
     return 0;
 }
 
-int send_tone(uint32_t base_freq, char *data, int index, FILE *ffreq, char *clk) {
+int send_tone(uint32_t base_freq, char *data, int index, FILE **ffreq, char *clk) {
     // set freq
     // echo [clk_name] [rate(Hz)] > /proc/clk/rate
     uint8_t tone = wspr_get_tone(data, index);
     uint32_t f = base_freq + (3 * tone) / 2;
-    fprintf(ffreq,"rate %s %i", clk, f);
+    printf("Sending tone %i of %i at %i Hz\n",index+1,WSPR_SYMBOL_COUNT,f);
+    printf("rate %s %i\n", clk, f);
+    fprintf(*ffreq,"rate %s %i", clk, f);
     return 0;
 }
 
-int stop_wspr(FILE *fen, FILE *ffreq, char *clk) {
+int stop_wspr(FILE **fen, FILE **ffreq, char *clk) {
     //disable clk0
     // echo disable [clk_name] > /proc/clk/enable
-    fprintf(fen,"disable %s", clk);
-    fclose(fen);
-    fclose(ffreq);
+    printf("disable %s\n", clk);
+    fprintf(*fen,"disable %s", clk);
+    fclose(*fen);
+    fclose(*ffreq);
     return 0;
 }
 
@@ -108,44 +112,52 @@ int stop_wspr(FILE *fen, FILE *ffreq, char *clk) {
     FILE *ffreq;
     char grid[6];
     char callsign[6] = "2X0UAJ";
-    char clk_name[4] = "clk0";
+    char clk_name[5] = "clk0\0";
     int32_t lon = 0;
     int32_t lat = 0;
     uint8_t wspr_data[WSPR_BUFFER_SIZE];
 
     if (gps_to_grid(grid, lon, lat) != 0) {
-        printf("Cannot translate long/lat");
+        printf("Cannot translate long/lat\n");
         return 1;
     }
     if (wspr_encode(wspr_data, callsign, grid, 7) != 0) {
-        printf("Cannot encode WSPR message");
+        printf("Cannot encode WSPR message\n");
         return 1;
     }
-
+    
+    printf("Decide random frequency within band for transmission\n");
     // Decide base frequency for transmission
     srand(time(NULL));
     uint32_t base_freq = BASE_FREQ_LOW + (rand() % (BASE_FREQ_HIGH - BASE_FREQ_LOW)); 
+    printf("Freqeuency decided at %i\n",base_freq);
 
+    printf("Attempt to init %s for transmission\n", clk_name);
     // Start transmit
-    if (init_wspr(fen, ffreq, clk_name) != 0) {
-        printf("%s unable to init!", clk_name);
+    if (init_wspr(&fen, &ffreq, clk_name) != 0) {
+        printf("%s unable to init!\n", clk_name);
         return 1;
     }
-    for (int i=0; i < WSPR_BUFFER_SIZE; i++) {
+    printf("%s init completete, start sending tones.\n", clk_name);
+
+    for (int i=0; i < WSPR_SYMBOL_COUNT; i++) {
+        int msec = 0;
         clock_t before = clock();
-        if (send_tone(base_freq, wspr_data, i, ffreq, clk_name) != 0) {
-            printf("Transmit failure");
+        if (send_tone(base_freq, wspr_data, i, &ffreq, clk_name) != 0) {
+            printf("Transmit failure\n");
             break;
         }
         do {
-
-        } while (clock() - before < WSPR_SYMBOL_TIME);
+            clock_t difference = clock() - before;
+            msec = difference * 1000 / CLOCKS_PER_SEC;
+        } while (msec < WSPR_SYMBOL_TIME);
     }
-    if (stop_wspr(fen, ffreq, clk_name) != 0) {
-        printf("Disconnect device immediately!");
+
+    if (stop_wspr(&fen, &ffreq, clk_name) != 0) {
+        printf("Disconnect device immediately!\n");
         return 2;
     }
 
-    printf("Transmission Complete");
+    printf("Transmission Complete\n");
 
 }
