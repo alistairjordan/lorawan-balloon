@@ -21,6 +21,9 @@
  #include <time.h>
  #include <stdlib.h>
  #include "wspr.h"
+ #include <errno.h>
+ #include <unistd.h> 
+ #include <sys/time.h> // for clock_gettime()   
 
  #define BASE_FREQ_LOW     14097000
  // high is end of 200hz spectrum - 6 hz to take account for transmission.
@@ -66,50 +69,36 @@ static int8_t gps_to_grid(char *grid, int32_t lon, int32_t lat) {
     return 0;
 }
 
-int init_wspr(FILE **fen, FILE **ffreq, char *clk) {
-    *fen = (fopen("/proc/clk/enable", "w"));
-    if(*fen == NULL)
-    {
-       printf("Error opening /proc/clk/enable!\n");
-       return 1;
-    }
-    *ffreq = (fopen("/proc/clk/rate", "w"));
-    if(*ffreq == NULL)
-    {
-       printf("Error opening /proc/clk/rate!\n");
-       return 1;
-    }
-    // enable clk0
-    //echo enable [clk_name] > /proc/clk/enable
-    printf("enable %s", clk);
-    fprintf(*fen,"enable %s", clk);
-    return 0;
+int init_wspr(char *clk) {
+    char echo_command[100];
+    // use system calls for the time being, direct file access seems to be throwing all kinds of errors, and I can't workout why..
+    // this needs FIXING!
+    snprintf(echo_command, sizeof(echo_command), "echo 'enable clk0' > /proc/clk/enable");
+    return (system(echo_command));
 }
 
-int send_tone(uint32_t base_freq, char *data, int index, FILE **ffreq, char *clk) {
+int send_tone(uint32_t base_freq, char *data, int index, char *clk) {
+    char echo_command[100];
     // set freq
     // echo [clk_name] [rate(Hz)] > /proc/clk/rate
     uint8_t tone = wspr_get_tone(data, index);
     uint32_t f = base_freq + (3 * tone) / 2;
     printf("Sending tone %i of %i at %i Hz\n",index+1,WSPR_SYMBOL_COUNT,f);
-    printf("rate %s %i\n", clk, f);
-    fprintf(*ffreq,"rate %s %i", clk, f);
-    return 0;
+    snprintf(echo_command, sizeof(echo_command), "echo 'clk0 %d' > /proc/clk/rate", tone);
+    return (system(echo_command));
 }
 
-int stop_wspr(FILE **fen, FILE **ffreq, char *clk) {
+int stop_wspr(char *clk) {
     //disable clk0
     // echo disable [clk_name] > /proc/clk/enable
-    printf("disable %s\n", clk);
-    fprintf(*fen,"disable %s", clk);
-    fclose(*fen);
-    fclose(*ffreq);
-    return 0;
+    char echo_command[100];
+    // use system calls for the time being, direct file access seems to be throwing all kinds of errors, and I can't workout why..
+    // this needs FIXING!
+    snprintf(echo_command, sizeof(echo_command), "echo 'disable clk0' > /proc/clk/enable");
+    return (system(echo_command));
 }
 
  int main() {
-    FILE *fen;
-    FILE *ffreq;
     char grid[6];
     char callsign[6] = "2X0UAJ";
     char clk_name[5] = "clk0\0";
@@ -134,26 +123,30 @@ int stop_wspr(FILE **fen, FILE **ffreq, char *clk) {
 
     printf("Attempt to init %s for transmission\n", clk_name);
     // Start transmit
-    if (init_wspr(&fen, &ffreq, clk_name) != 0) {
+    if (init_wspr(clk_name) != 0) {
         printf("%s unable to init!\n", clk_name);
         return 1;
     }
     printf("%s init completete, start sending tones.\n", clk_name);
 
+    int msec = 0;
+    struct timeval start, end;
+    long secs_used,micros_used;
+    //printf("Start time: %d\n", start_time);
     for (int i=0; i < WSPR_SYMBOL_COUNT; i++) {
-        int msec = 0;
-        clock_t before = clock();
-        if (send_tone(base_freq, wspr_data, i, &ffreq, clk_name) != 0) {
+        gettimeofday(&start, NULL);
+        if (send_tone(base_freq, wspr_data, i, clk_name) != 0) {
             printf("Transmit failure\n");
             break;
         }
-        do {
-            clock_t difference = clock() - before;
-            msec = difference * 1000 / CLOCKS_PER_SEC;
-        } while (msec < WSPR_SYMBOL_TIME);
+        gettimeofday(&end, NULL);
+        // account for how long it took for send_tone to work with drift correction
+        secs_used=(end.tv_sec - start.tv_sec); //avoid overflow by subtracting first
+        micros_used= ((secs_used*1000000) + end.tv_usec) - (start.tv_usec);        
+        usleep((WSPR_SYMBOL_TIME*1000 - micros_used));
     }
 
-    if (stop_wspr(&fen, &ffreq, clk_name) != 0) {
+    if (stop_wspr(clk_name) != 0) {
         printf("Disconnect device immediately!\n");
         return 2;
     }
