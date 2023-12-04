@@ -105,7 +105,7 @@ The initial prototype can be seen in the images below.
 * [_COMPLETED_] GPS Works, gpsd installed.
 * [_COMPLETED_] CI/CD Works.
 * [_TESTING_] WSPR Working, Still requires real-world tests.
-* [_IN PROGRESS_] Lora works, LoraWan not.
+* [_IN PROGRESS_] Lora works, LoraWan not tested, added EU region, missing others in kernel driver.
 * [_TODO_] "Glue" shell scripts to tack everything together.
 * [_TODO_] CSI Camera Interface with CSI/MIPI camera.
 * [_TODO_] Camera Images to Lorawan Packets.

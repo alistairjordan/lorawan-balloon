@@ -10,6 +10,7 @@ tools_board-builds: \
 		board-build-e2fsprogs \
 		board-build-sysstat \
 		board-build-mtd_utils \
+		board-build-lorawan-bridge \
 		board-build-wspr
 	@echo "build tools board done"
 
@@ -24,6 +25,7 @@ tools_board-clean:
 	$(MAKE) -C $(SYSDRV_DIR)/tools/board/stressapptest distclean
 	$(MAKE) -C $(SYSDRV_DIR)/tools/board/rk_ota distclean
 	$(MAKE) -C $(SYSDRV_DIR)/tools/board/sysstat distclean
+	$(MAKE) -C $(SYSDRV_DIR)/tools/board/lorawan-bridge distclean
 	$(MAKE) -C $(SYSDRV_DIR)/tools/board/wspr distclean
 
 board-build-toolkits:
@@ -80,6 +82,11 @@ endif
 board-build-sysstat:
 ifeq ($(ENABLE_SYSSTAT),y)
 	$(MAKE) -C $(SYSDRV_DIR)/tools/board/sysstat
+endif
+
+board-build-lorawan-bridge:
+ifeq ($(ENABLE_LORAWAN_BRIDGE),y)
+	$(MAKE) -C $(SYSDRV_DIR)/tools/board/lorawan-bridge
 endif
 
 board-build-wspr:

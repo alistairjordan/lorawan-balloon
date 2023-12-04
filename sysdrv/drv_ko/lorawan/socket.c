@@ -1,6 +1,7 @@
 #include <linux/list.h>
 #include <linux/net.h>
 #include <linux/if_arp.h>
+#include <linux/sockptr.h>
 #include <linux/termios.h>	/* For TIOCOUTQ/INQ */
 #include <net/sock.h>
 
@@ -380,7 +381,7 @@ dgram_getsockopt(struct sock *sk, int level, int optname,
 
 static int
 dgram_setsockopt(struct sock *sk, int level, int optname,
-		struct sockptr_t *optval, unsigned int optlen)
+		sockptr_t optval, unsigned int optlen)
 {
 	int val;
 	int err = 0;
