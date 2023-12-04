@@ -80,11 +80,14 @@ The initial prototype can be seen in the images below.
 
 # Project status
 
-* It boots into linux and doesn't blow up.
-* DTS Updated for correct pin attribution 
-* GPS Works, gpsd installed.
-* CI/CD Works
-* Lora works, LoraWan not
-* I2C working with Si5351
-* WSPR Working, Still requires realworld tests
-* Basically the entire code base is missing.
+* [COMPLETED] It boots into Linux/Buildroot system.
+* [COMPLETED] SPI working with Semtec sx1276 FSK Modem.
+* [COMPLETED] I2C working with Si5351 Pulse Generator.
+* [COMPLETED] UART working with uBlox GPS Module.
+* [COMPLETED] GPS Works, gpsd installed.
+* [COMPLETED] CI/CD Works.
+* [TESTING] WSPR Working, Still requires real-world tests.
+* [IN PROGRESS] Lora works, LoraWan not.
+* [TODO] "Glue" shell scripts to tack everything together.
+* [TODO] CSI Camera Interface with CSI/MIPI camera.
+* [TODO] Camera Images to Lorawan Packets
