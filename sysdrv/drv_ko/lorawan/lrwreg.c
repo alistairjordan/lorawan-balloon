@@ -48,6 +48,64 @@ static struct lrw_dr us902_928_drs[] = {
 	{},
 };
 
+static struct lrw_dr eu863_870_drs[] = {
+	{.sf = 12, .bw = 125000, .mode = LRW_LORA},
+	{.sf = 11, .bw = 125000, .mode = LRW_LORA},
+	{.sf = 10, .bw = 125000, .mode = LRW_LORA},
+	{.sf = 9, .bw = 125000, .mode = LRW_LORA},
+	{.sf = 8, .bw = 125000, .mode = LRW_LORA},
+	{.sf = 7, .bw = 125000, .mode = LRW_LORA},
+	{.sf = 7, .bw = 250000, .mode = LRW_LORA},
+	{},
+};
+
+static struct lrw_tx_power eu863_870_txpws[] = {
+	{.dbm = 16},
+	{.dbm = 14},
+	{.dbm = 12},
+	{.dbm = 10},
+	{.dbm = 8},
+	{.dbm = 6},
+	{.dbm = 4},
+	{.dbm = 2}
+};
+
+static struct lrw_payload_len eu863_870_pl_nofopt[] = {
+	{.m = 59, .n = 51},
+	{.m = 59, .n = 51},
+	{.m = 59, .n = 51},
+	{.m = 123, .n = 115},
+	{.m = 250, .n = 242},
+	{.m = 250, .n = 242},
+	{.m = 250, .n = 242},
+	{},
+};
+
+static struct lrw_payload_len eu863_870_pl_fopt[] = {
+	{.m = 59, .n = 51},
+	{.m = 59, .n = 51},
+	{.m = 59, .n = 51},
+	{.m = 123, .n = 115},
+	{.m = 230, .n = 222},
+	{.m = 230, .n = 222},
+	{.m = 230, .n = 222},
+	{},
+};
+
+u32 eu863_870_ch2frq(u8 dir, u8 ch)
+{
+	u32 frq_base;
+	u32 frq;
+	u32 step;
+
+	frq_base = 863100000;
+	step = 200000;
+	frq = frq_base + step * ch;
+
+	return frq;
+}
+
+
 static struct lrw_tx_power us902_928_txpws[] = {
 	{.dbm = 30},
 	{.dbm = 28},
@@ -165,7 +223,20 @@ u32 as923_ch2frq(u8 dir, u8 ch)
 }
 
 static const struct lrw_region_parm reg_parms[] = {
-	[LRW_EU863_870] = {},
+	[LRW_EU863_870] = {
+		.sync_word = 0x34,
+		.preamble_len = 8,
+		.drt = eu863_870_drs,
+		.pwt = eu863_870_txpws,
+		.plt[0] = eu863_870_pl_fopt,
+		.plt[1] = eu863_870_pl_nofopt,
+		.ch_2_frq = eu863_870_ch2frq,
+		.rx_delay1 = HZ,
+		.rx_delay2 = 2 * HZ,
+		.join_accept_delay1 = 5 * HZ,
+		.join_accept_delay2 = 6 * HZ,
+		.ack_timeout = 2 * HZ,
+	},
 	[LRW_US902_928] = {
 		.sync_word = 0x34,
 		.preamble_len = 8,
@@ -181,9 +252,9 @@ static const struct lrw_region_parm reg_parms[] = {
 		.ack_timeout = 2 * HZ,
 	},
 	[LRW_CN779_787] = {},
-	[LRW_EU443] = {},
+//	[LRW_EU443] = {},
 	[LRW_AU915_928] = {},
-	[LRW_CN470_510] = {},
+//	[LRW_CN470_510] = {},
 	[LRW_AS923] = {
 		.sync_word = 0x34,
 		.preamble_len = 8,
