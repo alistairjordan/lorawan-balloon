@@ -106,8 +106,8 @@ The initial prototype can be seen in the images below.
 * [_COMPLETED_] CI/CD Works.
 * [_TESTING_] WSPR Working, Still requires real-world tests.
 * [_IN PROGRESS_] Lora works, LoraWan not tested, added EU region, missing others in kernel driver.
+* [_IN PROGRESS_] LoraWan MAC to IPv4 Bridge.
 * [_TODO_] "Glue" shell scripts to tack everything together.
 * [_TODO_] CSI Camera Interface with CSI/MIPI camera.
 * [_TODO_] Camera Images to Lorawan Packets.
-* [_TODO_] LoraWan MAC to IPv4 Bridge.
 * [_TODO_] Reduce physical weight (Daughter Board?)
