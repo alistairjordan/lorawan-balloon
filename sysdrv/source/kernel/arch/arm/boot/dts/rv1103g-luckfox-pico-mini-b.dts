@@ -154,29 +154,29 @@
     };
 };
 
-// /**********SPI**********/
-// &spi0 {
-//	status = "okay";
-//	pinctrl-names = "default";
-//	pinctrl-0 = <&spi0m0_pins>;
-//	cs-gpios = <&gpio1 RK_PC0 1>;
-//	// cs-gpios = <&gpio1 RK_PD3 1>;
-//	#address-cells = <1>;
-//	#size-cells = <0>;
-//	spidev@0 {
-//		compatible = "rockchip,spidev";
-//		spi-max-frequency = <1000000000>;
-//		reg = <0>;
-//		status = "disabled";
-//	};
-//	sx1278@0 {
-//		compatible = "sx1278";
-//		reg = <0>;
-//		status = "okay";
-//		spi-max-frequency = <0x3b60>;
-//		clock-frequency = <32000000>;
-//	};
-//};
+/**********SPI**********/
+&spi0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi0m0_pins>;
+	cs-gpios = <&gpio1 RK_PC0 1>;
+	// cs-gpios = <&gpio1 RK_PD3 1>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	spidev@0 {
+		compatible = "rockchip,spidev";
+		spi-max-frequency = <1000000000>;
+		reg = <0>;
+		status = "disabled";
+	};
+	sx1278@0 {
+		compatible = "sx1278";
+		reg = <0>;
+		status = "okay";
+		spi-max-frequency = <0x3b60>;
+		clock-frequency = <32000000>;
+	};
+};
 
 /**********UART**********/
 &uart2 {

@@ -25,3 +25,5 @@ A special mention here is [https://github.com/threeme3/WsprryPi]threeme3/WsprryP
 The WSPR part of the project requires an oscillator to function at around 14MHz. 
 
 For this it was chosen to use the si5351, for the good community support, and the ease of the i2c interface.
+
+Technically, it a low pass filter should be added, but given the harmonics of a square wave and the transmission power, for this indiviual use case, I would consider unnecessary.
