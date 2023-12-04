@@ -98,13 +98,21 @@ int stop_wspr(char *clk) {
     return (system(echo_command));
 }
 
- int main() {
+ int main(int argc, char *argv[]) {
     char grid[6];
-    char callsign[6] = "2X0UAJ";
+    char callsign[6];//"=2X0UAJ";
     char clk_name[5] = "clk0\0";
     int32_t lon = 0;
     int32_t lat = 0;
     uint8_t wspr_data[WSPR_BUFFER_SIZE];
+
+    if (argc < 4) {
+        printf("Usage is ./wspr lon[int32] lat[int32] CALLSIGN[char[6]]");
+        return 1;
+    }
+    sscanf(argv[1],"%ld",&lon);
+    sscanf(argv[2],"%ld",&lat);
+    sscanf(argv[3],"%s.6",&callsign);
 
     if (gps_to_grid(grid, lon, lat) != 0) {
         printf("Cannot translate long/lat\n");
