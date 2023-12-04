@@ -90,4 +90,6 @@ The initial prototype can be seen in the images below.
 * [_IN PROGRESS_] Lora works, LoraWan not.
 * [_TODO_] "Glue" shell scripts to tack everything together.
 * [_TODO_] CSI Camera Interface with CSI/MIPI camera.
-* [_TODO_] Camera Images to Lorawan Packets
+* [_TODO_] Camera Images to Lorawan Packets.
+* [_TODO_] LoraWan MAC to IPv4 Bridge.
+* 
