@@ -4,6 +4,24 @@
 
 This project is designed to build a linux based LoraWan HAB balloon. The idea of the project is to make an advancement of the current PicoBalloon communities. 
 
+## Project Advantages/Disadvantages
+
+As ever, re-inventing the wheel has it's own pros and cons. This section aims to answer FAQs on why this project has been built and designed.
+
+### Advantages
+
+* Linux based - In the past, common sense would have assumed to have used low-power/arduino based microcontrollers. However, as chips have become vastly more efficient and cheaper in recent years (OK, that's a topic for another day!). This means that it has become sensible to start building using Linux. Advantages include being able to use Linux based drivers. For example the LoraWan interface is now a standard linux socket interface, and the HAM radio module can be interfaced with sysfs!
+* Ease of development - Linux will allow GDB to be run on the end device for debugging, the environment is running ADB allowing code to easily be pushed or shell to be accessed. Multiple layers of _shit_ can be abstracted... Don't understand the FSK Lora Protocol or SPI interfaces? Fine. It's just a unix socket now! :)
+* Ease of build - You can repeat this project with a soldering iron, a few thin wires and a swear jar.
+* Sets a new standard of MVP (Minimal Viable Product) - The SDK and simple build means it can be used as a base design for quickly bootstrapping any future projects.
+
+### Disadvantages
+
+* Linux based - Yeah, it's not a RTOS. Looking at the drift of WSPR.. eh, famous last words but should be fine.
+* Ease of development - It vastly changes the paradigm compared to Arduino based solutions
+* Ease of build - WEIGHT!!!!!! - I will work on this one.
+* Complexity - While fine once you get used to it... there is a lot going on here.
+
 ## Network design decisions
 
 There are 2 major providers of LoraWan coverage:
@@ -54,9 +72,13 @@ This design decision has been made for the following reasons:
 
 Generally modern GPS modules are simply UART based, use similar chipsets and have essentially all become unified since they became integrated into smartphones. I didn't take much bother into researching this one. They should in theory neary all just be hotswappable.
 
+*Update*: No, no they are not. Added gpsd as a common interface.
+
 #### Camera Module
 
 This one needs research. I just picked the smallest, lightest camera I had on hand (It came from a ESP32 kit). Might not be the best solution power wise. This section might need an update.
+
+*Update*, who uses a 20 Pin non-conformant MIPI/CSI interface on a dev board?!? Luckfox.. Otherwise the best dev board i've ever worked with :/
 
 ## Notes on design documentation and Source code
 
@@ -68,15 +90,24 @@ I have placed design thoughts within the ./doc directory within this repository.
 
 ## Initial Prototype
 
-The initial prototype can be seen in the image below.
+The initial prototype can be seen in the images below.
 
 ![Prototype](./docs/images/prototype.jpg)
+![Prototype](./docs/images/schematic.jpg)
+
 
 # Project status
 
-* It boots into linux and doesn't blow up.
-* DTS Updated for correct pin attribution 
-* GPS Works
-* Starnights LoraWan module upgraded to work with Linux 5.10
-* Lora and LoraWan Kernel Modules Building & Inserting
-* Basically the entire code base is missing.
+* [_COMPLETED_] It boots into Linux/Buildroot system.
+* [_COMPLETED_] SPI working with Semtec sx1276 FSK Modem.
+* [_COMPLETED_] I2C working with Si5351 Pulse Generator.
+* [_COMPLETED_] UART working with uBlox GPS Module.
+* [_COMPLETED_] GPS Works, gpsd installed.
+* [_COMPLETED_] CI/CD Works.
+* [_TESTING_] WSPR Working, Still requires real-world tests.
+* [_IN PROGRESS_] Lora works, LoraWan not tested, added EU region, missing others in kernel driver.
+* [_TODO_] "Glue" shell scripts to tack everything together.
+* [_TODO_] CSI Camera Interface with CSI/MIPI camera.
+* [_TODO_] Camera Images to Lorawan Packets.
+* [_TODO_] LoraWan MAC to IPv4 Bridge.
+* [_TODO_] Reduce physical weight (Daughter Board?)
