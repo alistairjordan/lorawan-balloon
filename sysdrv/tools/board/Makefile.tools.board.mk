@@ -9,7 +9,8 @@ tools_board-builds: \
 		board-build-rockchip_test \
 		board-build-e2fsprogs \
 		board-build-sysstat \
-		board-build-mtd_utils
+		board-build-mtd_utils \
+		board-build-lorawan-bridge
 	@echo "build tools board done"
 
 tools_board-clean:
@@ -23,6 +24,7 @@ tools_board-clean:
 	$(MAKE) -C $(SYSDRV_DIR)/tools/board/stressapptest distclean
 	$(MAKE) -C $(SYSDRV_DIR)/tools/board/rk_ota distclean
 	$(MAKE) -C $(SYSDRV_DIR)/tools/board/sysstat distclean
+	$(MAKE) -C $(SYSDRV_DIR)/tools/board/lorawan-bridge distclean
 
 board-build-toolkits:
 	$(MAKE) -C $(SYSDRV_DIR)/tools/board/toolkits
@@ -77,4 +79,9 @@ endif
 board-build-sysstat:
 ifeq ($(ENABLE_SYSSTAT),y)
 	$(MAKE) -C $(SYSDRV_DIR)/tools/board/sysstat
+endif
+
+board-build-lorawan-bridge:
+ifeq ($(ENABLE_LORAWAN_BRIDGE),y)
+	$(MAKE) -C $(SYSDRV_DIR)/tools/board/lorawan-bridge
 endif
