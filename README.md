@@ -4,6 +4,24 @@
 
 This project is designed to build a linux based LoraWan HAB balloon. The idea of the project is to make an advancement of the current PicoBalloon communities. 
 
+## Project Advantages/Disadvantages
+
+As ever, re-inventing the wheel has it's own pros and cons. This section aims to answer FAQs on why this project has been built and designed.
+
+### Advantages
+
+* Linux based - In the past, common sense would have assumed to have used low-power/arduino based microcontrollers. However, as chips have become vastly more efficient and cheaper in recent years (OK, that's a topic for another day!). This means that it has become sensible to start building using Linux. Advantages include being able to use Linux based drivers. For example the LoraWan interface is now a standard linux socket interface, and the HAM radio module can be interfaced with sysfs!
+* Ease of development - Linux will allow GDB to be run on the end device for debugging, the environment is running ADB allowing code to easily be pushed or shell to be accessed. Multiple layers of _shit_ can be abstracted... Don't understand the FSK Lora Protocol or SPI interfaces? Fine. It's just a unix socket now! :)
+* Ease of build - You can repeat this project with a soldering iron, a few thin wires and a swear jar.
+* Sets a new standard of MVP (Minimal Viable Product) - The SDK and simple build means it can be used as a base design for quickly bootstrapping any future projects.
+
+### Disadvantages
+
+* Linux based - Yeah, it's not a RTOS. Looking at the drift of WSPR.. eh, famous last words but should be fine.
+* Ease of development - It vastly changes the paradigm compared to Arduino based solutions
+* Ease of build - WEIGHT!!!!!! - I will work on this one.
+* Complexity - While fine once you get used to it... there is a lot going on here.
+
 ## Network design decisions
 
 There are 2 major providers of LoraWan coverage:
