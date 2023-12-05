@@ -18,5 +18,5 @@ _Overall_ - there are two choices.
 
 The former, while a PITA initially, actually provides what initially appears to be an easy to use interface to Lora, with functions such as spreading factor, band etc all controllable using ioctl calls.
 
-It appears that Starnight has also produced a LoraWan driver, which is currently written for the 4.11 kernel, which needs updating to the current kernel and testing.
+It appears that Starnight has also produced a LoraWan driver, which is currently written for the 4.11 kernel. I've updated this to work with the 5.10 Kernel being used (Should upgrade this to use mainline at somepoint!). The driver has been missing several parts, such as coding for regions outside ones he lives in (He has a edu.tw email, and apparently they use AU923 over there!). I've started adding them in to stop the project having any black spots, but currently I've only added EU bands as that's the region I'm doing testing in.
 
