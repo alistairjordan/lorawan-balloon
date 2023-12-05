@@ -18,7 +18,7 @@ As ever, re-inventing the wheel has it's own pros and cons. This section aims to
 ### Disadvantages
 
 * Linux based - Yeah, it's not a RTOS. Looking at the drift of WSPR.. eh, famous last words but should be fine.
-* Ease of development - It vastly changes the paradigm compared to Arduino based solutions
+* Ease of development - It vastly changes the paradigm compared to Arduino based solutions. Also, "just a unix socket" is quite oversimplified, for example Lorawan NWK (Encryption key) currently needs to set using ioctl system calls.
 * Ease of build - WEIGHT!!!!!! - I will work on this one.
 * Complexity - While fine once you get used to it... there is a lot going on here.
 
