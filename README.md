@@ -10,8 +10,8 @@ As ever, re-inventing the wheel has it's own pros and cons. This section aims to
 
 ### Advantages
 
-* Linux based - In the past, common sense would have assumed to have used low-power/arduino based microcontrollers. However, as chips have become vastly more efficient and cheaper in recent years (OK, that's a topic for another day!). This means that it has become sensible to start building using Linux. Advantages include being able to use Linux based drivers. For example the LoraWan interface is now a standard linux socket interface, and the HAM radio module can be interfaced with sysfs!
-* Ease of development - Linux will allow GDB to be run on the end device for debugging, the environment is running ADB allowing code to easily be pushed or shell to be accessed. Multiple layers of _shit_ can be abstracted... Don't understand the FSK Lora Protocol or SPI interfaces? Fine. It's just a unix socket now! :)
+* Linux based - In the past, common sense would have assumed to have used low-power/arduino based microcontrollers. However, as chips have become vastly more efficient and cheaper in recent years (OK, that's a topic for another day!). This means that it has become sensible to start building using Linux. Advantages include being able to have everything as a microservice, GPS, 0-1GHz HAM/ISM/Lora Radio, the lot! All accessible with simple JSON calls!
+* Ease of development - Linux will allow GDB to be run on the end device for debugging, the environment is running ADB allowing code to easily be pushed or shell to be accessed. Multiple layers of _shit_ can be abstracted... Don't understand the FSK Lora Protocol or SPI interfaces? Fine :)
 * Ease of build - You can repeat this project with a soldering iron, a few thin wires and a swear jar.
 * Sets a new standard of MVP (Minimal Viable Product) - The SDK and simple build means it can be used as a base design for quickly bootstrapping any future projects.
 
@@ -104,11 +104,9 @@ The initial prototype can be seen in the images below.
 * [_COMPLETED_] UART working with uBlox GPS Module.
 * [_COMPLETED_] GPS Works, gpsd installed.
 * [_COMPLETED_] CI/CD Works.
-* [_TESTING_] WSPR Working, Still requires real-world tests.
-* [_IN PROGRESS_] Lora works, LoraWan not tested, added EU region, missing others in kernel driver.
-* [_Update_] The driver is a total mess. Lora driver needs reworking also... ;(
 * [_IN PROGRESS_] LoraWan MAC to IPv4 Bridge.
-* [_TODO_] "Glue" shell scripts to tack everything together.
 * [_TODO_] CSI Camera Interface with CSI/MIPI camera.
 * [_TODO_] Camera Images to Lorawan Packets.
+* [_TODO_] "Glue" shell scripts to tack everything together.
 * [_TODO_] Reduce physical weight (Daughter Board?)
+* [_TODO_LOW_] Convert WSPR to micro-service interface.
