@@ -79,7 +79,8 @@ Generally modern GPS modules are simply UART based, use similar chipsets and hav
 This one needs research. I just picked the smallest, lightest camera I had on hand (It came from a ESP32 kit). Might not be the best solution power wise. This section might need an update.
 
 *Update*, who uses a 20 Pin non-conformant MIPI/CSI interface on a dev board?!? Luckfox.. Otherwise the best dev board i've ever worked with :/
-*Update 2* The weight OR cost (middle board, or custom flex cable) of having to adapt the cable is just silly, I just bought the camera they sell.
+
+*Update 2*, The weight OR cost (middle board, or custom flex cable) of having to adapt the cable is just silly, I just bought the camera they sell.
 
 ## Notes on design documentation and Source code
 
