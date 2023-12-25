@@ -1,0 +1,3 @@
+[submodule "sysdrv/tools/board/lorawan-bridge/sysdrv/tools/board/lorawan-bridge/b64.c"]
+	path = sysdrv/tools/board/lorawan-bridge/sysdrv/tools/board/lorawan-bridge/b64.c
+	url = git@github.com:jwerle/b64.c.git

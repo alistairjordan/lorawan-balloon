@@ -1,0 +1,1 @@
+int LorawanSendHandler(struct mg_connection *conn, void *cbdata);

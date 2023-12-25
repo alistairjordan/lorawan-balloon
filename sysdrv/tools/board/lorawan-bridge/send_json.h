@@ -1,0 +1,1 @@
+int SendJSON(struct mg_connection *conn, cJSON *json_obj);
