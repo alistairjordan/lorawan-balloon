@@ -24,6 +24,7 @@
 /*! \file periodic-uplink/B-L072Z-LRWAN1/main.c */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "utilities.h"
 #include "board.h"
 #include "RegionCommon.h"
@@ -274,20 +275,21 @@ int main( void )
         // Fatal error, endless loop.
         while ( 1 )
         {
+            exit(-1); // This is linux now :)
         }
     }
 
     // Set system maximum tolerated rx error in milliseconds
     LmHandlerSetSystemMaxRxError( 20 );
-
+    printf("HERE5");
     // The LoRa-Alliance Compliance protocol package should always be
     // initialized and activated.
     LmHandlerPackageRegister( PACKAGE_ID_COMPLIANCE, &LmhpComplianceParams );
-
+    printf("HERE6");
     LmHandlerJoin( );
-
+    printf("HERE7");
     StartTxProcess( LORAMAC_HANDLER_TX_ON_TIMER );
-
+    printf("HERE8");
     // while( 1 )
     // {
     //     // Process characters sent over the command line interface

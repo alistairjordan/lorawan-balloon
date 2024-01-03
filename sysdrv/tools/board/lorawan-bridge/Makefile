@@ -5,11 +5,15 @@
 #
 
 #This makefile is used to test the other Makefiles
+ifeq ($(SYSDRV_PARAM), )
+    SYSDRV_PARAM:=../../../Makefile.param
+    include $(SYSDRV_PARAM)
+endif
 
 
 PROG = rest_server
 SRC =  rest.c cJSON/cJSON.c cJSON/cJSON_Utils.c send_json.c lorawan_send.c b64.c/encode.c b64.c/decode.c b64.c/buffer.c
-LORAWAN_SRC = LoraMac/spidev_lib/spidev_lib.c LoraMac/board.c LoraMac/main.c LoraMac/spi-board.c LoraMac/delay.c LoraMac/sx1276.c LoraMac/sx1276-board.c LoraMac/LoRaMac.c LoraMac/LoRaMacAdr.c LoraMac/LoRaMacClassB.c LoraMac/LoRaMacCommands.c LoraMac/LoRaMacConfirmQueue.c LoraMac/LoRaMacCrypto.c LoraMac/LoRaMacParser.c LoraMac/LoRaMacSerializer.c LoraMac/timer.c LoraMac/utilities.c LoraMac/systime.c
+LORAWAN_SRC = LoraMac/spidev_lib/spidev_lib.c LoraMac/board.c LoraMac/main.c LoraMac/spi-board.c LoraMac/delay.c LoraMac/sx1276.c LoraMac/sx1276-board.c LoraMac/LoRaMac.c LoraMac/LoRaMacAdr.c LoraMac/LoRaMacClassB.c LoraMac/LoRaMacCommands.c LoraMac/LoRaMacConfirmQueue.c LoraMac/LoRaMacCrypto.c LoraMac/LoRaMacParser.c LoraMac/LoRaMacSerializer.c LoraMac/timer.c LoraMac/utilities.c LoraMac/systime.c LoraMac/rtc-board.c
 LORAMAC_COMMON_SRC = LoraMac/common/LmHandler/LmHandler.c LoraMac/common/LmHandler/packages/FragDecoder.c LoraMac/common/LmHandler/packages/LmhpClockSync.c LoraMac/common/LmHandler/packages/LmhpCompliance.c LoraMac/common/LmHandler/packages/LmhpFragmentation.c LoraMac/common/LmHandler/packages/LmhpRemoteMcastSetup.c
 LORAMAC_COMMON_SRC += LoraMac/common/CayenneLpp.c LoraMac/common/LmHandlerMsgDisplay.c
 LORAMAC_SOFT_SE_SRC += LoraMac/soft-se/aes.c LoraMac/soft-se/cmac.c LoraMac/soft-se/soft-se-hal.c LoraMac/soft-se/soft-se.c
@@ -23,6 +27,13 @@ INCLUDE = -ILoraMac -ILoraMac/region -ILoraMac/common -ILoraMac/common/LmHandler
 
 include $(TOP)/resources/Makefile.in-os
 
+export LC_ALL=C
+SHELL:=/bin/bash
+# arch=arm default use thumb-2 compile
+ifeq ($(SYSDRV_ARCH_TYPE),arm)
+PKG_USE_THUMB2 ?= YES
+endif
+
 ifeq ($(TARGET_OS),LINUX)
 	LIBS += -ldl
 	LIBS += -lm
@@ -31,11 +42,13 @@ endif
 all: $(PROG)
 
 $(PROG): $(CIVETWEB_LIB) $(LORAWAN_SRC) $(LORAMAC_COMMON_SRC) $(LORAMAC_REGION_SRC) $(LORAMAC_SOFT_SE_SRC)
-	$(CC) -o $@ $(CFLAGS) $(INCLUDE) $(LDFLAGS) $(LORAWAN_SRC) $(LORAMAC_COMMON_SRC) $(LORAMAC_REGION_SRC) $(LORAMAC_SOFT_SE_SRC) $(CIVETWEB_LIB) $(LIBS)
+	$(SYSDRV_CROSS)-$(CC) -o $@ $(CFLAGS) $(INCLUDE) $(LDFLAGS) $(LORAWAN_SRC) $(LORAMAC_COMMON_SRC) $(LORAMAC_REGION_SRC) $(LORAMAC_SOFT_SE_SRC) $(CIVETWEB_LIB) $(LIBS)
+	$(call MAROC_COPY_PKG_TO_SYSDRV_OUTPUT, $(SYSDRV_DIR_OUT_ROOTFS), $(PKG_BIN))
 
 $(CIVETWEB_LIB):
 	$(MAKE) -C $(TOP) WITH_IPV6=1 WITH_WEBSOCKET=1 COPT='-DNO_SSL -DMG_EXPERIMENTAL_INTERFACES' clean lib
 	cp $(TOP)/$(CIVETWEB_LIB) .
+	$(call MAROC_COPY_PKG_TO_SYSDRV_OUTPUT, $(SYSDRV_DIR_OUT_ROOTFS), $(PKG_BIN))
 
 clean:
 	rm -f $(CIVETWEB_LIB) $(PROG)

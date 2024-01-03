@@ -22,6 +22,7 @@
  *
  * \author    Miguel Luis ( Semtech )
  */
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -263,6 +264,7 @@ LmHandlerErrorStatus_t LmHandlerInit( LmHandlerCallbacks_t *handlerCallbacks,
 
     if( LoRaMacInitialization( &LoRaMacPrimitives, &LoRaMacCallbacks, LmHandlerParams->Region ) != LORAMAC_STATUS_OK )
     {
+        printf("IT FAILDED HERE");
         return LORAMAC_HANDLER_ERROR;
     }
 
@@ -335,11 +337,14 @@ LmHandlerErrorStatus_t LmHandlerInit( LmHandlerCallbacks_t *handlerCallbacks,
 
     LoRaMacTestSetDutyCycleOn( LmHandlerParams->DutyCycleEnabled );
 
+    printf("HERE1");
     LoRaMacStart( );
+    printf("HERE2");
 
     mibReq.Type = MIB_NETWORK_ACTIVATION;
     if( LoRaMacMibGetRequestConfirm( &mibReq ) == LORAMAC_STATUS_OK )
     {
+        printf("HERE3");
         if( mibReq.Param.NetworkActivation == ACTIVATION_TYPE_NONE )
         {
             if( LmHandlerCallbacks->OnNetworkParametersChange != NULL )
@@ -348,6 +353,7 @@ LmHandlerErrorStatus_t LmHandlerInit( LmHandlerCallbacks_t *handlerCallbacks,
             }
         }
     }
+    printf("HERE4");
     return LORAMAC_HANDLER_SUCCESS;
 }
 

@@ -185,6 +185,8 @@ TimerTime_t RtcTempCompensation( TimerTime_t period, float temperature );
  */
 void RtcProcess( void );
 
+uint32_t GettimeToTicks(struct timespec *ts);
+
 #ifdef __cplusplus
 }
 #endif

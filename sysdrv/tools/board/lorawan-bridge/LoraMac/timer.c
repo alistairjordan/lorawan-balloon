@@ -23,6 +23,7 @@
 #include "utilities.h"
 #include "board.h"
 #include "timer.h"
+#include "rtc-board.h"
 
 /*!
  * Safely execute call back
@@ -84,8 +85,9 @@ static bool TimerExists( TimerEvent_t *obj );
 
 void TimerInit( TimerEvent_t *obj, void ( *callback )( void *context ) )
 {
+    uint32_t time = RtcGetTimerValue();
+    obj->ReloadValue = time;
     obj->Timestamp = 0;
-    obj->ReloadValue = 0;
     obj->IsStarted = false;
     obj->IsNext2Expire = false;
     obj->Callback = callback;
@@ -100,7 +102,10 @@ void TimerSetContext( TimerEvent_t *obj, void* context )
 
 void TimerStart( TimerEvent_t *obj )
 {
-    uint32_t elapsedTime = 0;
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    uint32_t time = GettimeToTicks(&ts);
+    uint32_t elapsedTime = time;
 
     CRITICAL_SECTION_BEGIN( );
 
@@ -116,13 +121,13 @@ void TimerStart( TimerEvent_t *obj )
 
     if( TimerListHead == NULL )
     {
-        RtcSetTimerContext( );
+        //RtcSetTimerContext( );
         // Inserts a timer at time now + obj->Timestamp
         TimerInsertNewHeadTimer( obj );
     }
     else
     {
-        elapsedTime = RtcGetTimerElapsedTime( );
+        elapsedTime = RtcGetTimerValue( );
         obj->Timestamp += elapsedTime;
 
         if( obj->Timestamp < TimerListHead->Timestamp )
@@ -184,8 +189,8 @@ void TimerIrqHandler( void )
     TimerEvent_t* cur;
     TimerEvent_t* next;
 
-    uint32_t old =  RtcGetTimerContext( );
-    uint32_t now =  RtcSetTimerContext( );
+    uint32_t old =  RtcGetTimerValue( );
+    uint32_t now =  RtcGetTimerValue( );
     uint32_t deltaContext = now - old; // intentional wrap around
 
     // Update timeStamp based upon new Time Reference
@@ -216,7 +221,7 @@ void TimerIrqHandler( void )
     }
 
     // Remove all the expired object from the list
-    while( ( TimerListHead != NULL ) && ( TimerListHead->Timestamp < RtcGetTimerElapsedTime( ) ) )
+    while( ( TimerListHead != NULL ) && ( TimerListHead->Timestamp < RtcGetTimerValue( ) ) )
     {
         cur = TimerListHead;
         TimerListHead = TimerListHead->Next;
@@ -366,11 +371,11 @@ static void TimerSetTimeout( TimerEvent_t *obj )
     int32_t minTicks= RtcGetMinimumTimeout( );
     obj->IsNext2Expire = true;
 
-    // In case deadline too soon
-    if( obj->Timestamp  < ( RtcGetTimerElapsedTime( ) + minTicks ) )
-    {
-        obj->Timestamp = RtcGetTimerElapsedTime( ) + minTicks;
-    }
+    // // In case deadline too soon
+    // if( obj->Timestamp  < ( RtcGetTimerElapsedTime( ) + minTicks ) )
+    // {
+    //     obj->Timestamp = RtcGetTimerElapsedTime( ) + minTicks;
+    // }
     RtcSetAlarm( obj->Timestamp );
 }
 

@@ -45,6 +45,7 @@
 #include "LoRaMacAdr.h"
 #include "LoRaMacSerializer.h"
 #include "radio.h"
+#include <stdio.h>
 
 #include "LoRaMac.h"
 
@@ -3758,6 +3759,7 @@ LoRaMacStatus_t LoRaMacInitialization( LoRaMacPrimitives_t* primitives, LoRaMacC
     if( ( primitives == NULL ) ||
         ( callbacks == NULL ) )
     {
+        printf("primitives or callbacks null");
         return LORAMAC_STATUS_PARAMETER_INVALID;
     }
 
@@ -3766,11 +3768,13 @@ LoRaMacStatus_t LoRaMacInitialization( LoRaMacPrimitives_t* primitives, LoRaMacC
         ( primitives->MacMlmeConfirm == NULL ) ||
         ( primitives->MacMlmeIndication == NULL ) )
     {
+        printf("primitives null");
         return LORAMAC_STATUS_PARAMETER_INVALID;
     }
     // Verify if the region is supported
     if( RegionIsActive( region ) == false )
     {
+        printf("region problem: %d", region);
         return LORAMAC_STATUS_REGION_NOT_SUPPORTED;
     }
 
@@ -3922,24 +3926,28 @@ LoRaMacStatus_t LoRaMacInitialization( LoRaMacPrimitives_t* primitives, LoRaMacC
     // Initialize the Secure Element driver
     if( SecureElementInit( &Nvm.SecureElement ) != SECURE_ELEMENT_SUCCESS )
     {
+        printf("Secure Element Driver failed");
         return LORAMAC_STATUS_CRYPTO_ERROR;
     }
 
     // Initialize Crypto module
     if( LoRaMacCryptoInit( &Nvm.Crypto ) != LORAMAC_CRYPTO_SUCCESS )
     {
+        printf("Crypto Driver failed");
         return LORAMAC_STATUS_CRYPTO_ERROR;
     }
 
     // Initialize MAC commands module
     if( LoRaMacCommandsInit( ) != LORAMAC_COMMANDS_SUCCESS )
     {
+         printf("MAC Driver failed");
         return LORAMAC_STATUS_MAC_COMMAD_ERROR;
     }
 
     // Set multicast downlink counter reference
     if( LoRaMacCryptoSetMulticastReference( Nvm.MacGroup2.MulticastChannelList ) != LORAMAC_CRYPTO_SUCCESS )
     {
+         printf("Multicast Downlink Driver failed");
         return LORAMAC_STATUS_CRYPTO_ERROR;
     }
 
