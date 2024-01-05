@@ -30,6 +30,8 @@
  */
 #include "LoRaMac.h"
 #include "Region.h"
+#include <stdio.h>
+
 
 // Setup regions
 //#ifdef REGION_AS923
@@ -530,67 +532,76 @@ bool RegionIsActive( LoRaMacRegion_t region )
         * AS band on 923MHz
         */
         case LORAMAC_REGION_AS923:
+            printf("AS923 ACTIVE\n");
             AS923_IS_ACTIVE( );
             break;
         /*!
         * Australian band on 915MHz
         */
         case LORAMAC_REGION_AU915:
+            printf("AU915 ACTIVE\n");
             AU915_IS_ACTIVE( );
             break;
         /*!
         * Chinese band on 470MHz
         */
         case LORAMAC_REGION_CN470:
+            printf("CN470 ACTIVE\n");
             CN470_IS_ACTIVE( );
             break;
         /*!
         * Chinese band on 779MHz
         */
         case LORAMAC_REGION_CN779:
+            printf("CN779 ACTIVE\n");
             CN779_IS_ACTIVE( );
             break;
         /*!
         * European band on 433MHz
         */
         case LORAMAC_REGION_EU433:
+            printf("EU433 ACTIVE\n");
             EU433_IS_ACTIVE( );
             break;
         /*!
         * European band on 868MHz
         */
         case LORAMAC_REGION_EU868:
+            printf("EU868 ACTIVE\n");
             EU868_IS_ACTIVE( );
             break;
         /*!
         * South korean band on 920MHz
         */
         case LORAMAC_REGION_KR920:
+            printf("KR920 ACTIVE\n");
             KR920_IS_ACTIVE( );
             break;
         /*!
         * India band on 865MHz
         */
         case LORAMAC_REGION_IN865:
+            printf("IN865 ACTIVE\n");
             IN865_IS_ACTIVE( );
             break;
         /*!
         * North american band on 915MHz
         */
         case LORAMAC_REGION_US915:
+            printf("US915 ACTIVE\n");
             US915_IS_ACTIVE( );
             break;
         /*!
         * Russia band on 864MHz
         */
         case LORAMAC_REGION_RU864:
+            printf("RU864 ACTIVE\n");
             RU864_IS_ACTIVE( );
             break;        
-        
-        
+               
         default:
         {
-            return true; // FIX THIS NOW
+            return false;
         }
     }
 }

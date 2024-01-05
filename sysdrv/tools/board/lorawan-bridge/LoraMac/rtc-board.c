@@ -16,8 +16,8 @@ uint32_t GettimeToTicks(struct timespec *ts) {
 
 struct timespec TicksToGettime(uint32_t time) {
     struct timespec ts;
-    ts.tv_sec += time / 1000000000;
-    ts.tv_nsec += time % 1000000000;
+    ts.tv_sec = time / 1000000000;
+    ts.tv_nsec = time % 1000000000;
     return ts;
 }
 

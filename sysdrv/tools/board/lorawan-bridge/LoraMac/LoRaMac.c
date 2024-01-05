@@ -1568,6 +1568,7 @@ bool LoRaMacIsBusy( void )
 
     if( LoRaMacRadioEvents.Events.RxProcessPending == 1 )
     {
+        printf("Rx Process Pending: LoraMac Busy.\n");
         return true;
     }
 
@@ -1576,6 +1577,9 @@ bool LoRaMacIsBusy( void )
     {
         return false;
     }
+    printf("Unknown Pending: LoraMac Busy.\n");
+    printf("MacCtx.MacState == LORAMAC_IDLE: %s\n", MacCtx.MacState == LORAMAC_IDLE ? "True" : "False");
+    printf("MacCtx.AllowRequests == LORAMAC_REQUEST_HANDLING_ON: %s\n", MacCtx.AllowRequests == LORAMAC_REQUEST_HANDLING_ON ? "True" : "False");
     return true;
 }
 

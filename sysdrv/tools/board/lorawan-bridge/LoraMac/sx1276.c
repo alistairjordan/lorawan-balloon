@@ -24,6 +24,7 @@
  *
  * \author    Wael Guibene ( Semtech )
  */
+#include <stdio.h>
 #include <math.h>
 #include <string.h>
 #include "utilities.h"
@@ -1298,11 +1299,13 @@ void SX1276WriteBuffer( uint32_t addr, uint8_t *buffer, uint8_t size )
 
     //NSS = 0;
     //GpioWrite( &SX1276.Spi.Nss, 0 );
-
     SpiInOut( &SX1276.Spi, addr | 0x80 );
     for( i = 0; i < size; i++ )
     {
+        printf("Writing data %x\n", buffer[i]);
+        printf("HERE");
         SpiInOut( &SX1276.Spi, buffer[i] );
+        printf("HERE");
     }
 
     //NSS = 1;
@@ -1321,6 +1324,7 @@ void SX1276ReadBuffer( uint32_t addr, uint8_t *buffer, uint8_t size )
     for( i = 0; i < size; i++ )
     {
         buffer[i] = SpiInOut( &SX1276.Spi, 0 );
+        printf("Reading data %x\n",buffer[i]);
     }
 
     //NSS = 1;

@@ -361,11 +361,13 @@ bool LmHandlerIsBusy( void )
 {
     if( LoRaMacIsBusy( ) == true )
     {
+        printf("LoraMacIsBusy!\n");
         return true;
     }
     if( LmHandlerJoinStatus( ) != LORAMAC_HANDLER_SET )
     {
         // The network isn't yet joined, try again later.
+        printf("NotJoinedYet!\n");
         LmHandlerJoin( );
         return true;
     }
@@ -409,12 +411,14 @@ void LmHandlerProcess( void )
     // If it is the case exit function earlier
     if( LmHandlerPackageIsTxPending( ) == true )
     {
+        printf("Package Tx Pending\n");
         return;
     }
 
     // If a MAC layer scheduled uplink is still pending try to send it.
     if( IsUplinkTxPending == true )
     {
+        printf("Uplink Tx Pending\n");
         // Send an empty message
         LmHandlerAppData_t appData =
         {

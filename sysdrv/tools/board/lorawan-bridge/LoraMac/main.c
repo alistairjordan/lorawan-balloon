@@ -169,9 +169,9 @@ static void OnSysTimeUpdate( bool isSynchronized, int32_t timeCorrection );
 #else
 static void OnSysTimeUpdate( void );
 #endif
-static void PrepareTxFrame( void );
+static void PrepareTxFrame( uint8_t size, char buffer[] );
 static void StartTxProcess( LmHandlerTxEvents_t txEvent );
-static void UplinkProcess( void );
+static void UplinkProcess( uint8_t size, char buffer[] );
 
 static void OnTxPeriodicityChanged( uint32_t periodicity );
 static void OnTxFrameCtrlChanged( LmHandlerMsgTypes_t isTxConfirmed );
@@ -296,10 +296,18 @@ int main( void )
     //     CliProcess( &Uart2 );
 
         // Processes the LoRaMac events
-        LmHandlerProcess( );
+    LmHandlerProcess( );
 
         // Process application uplinks management
-        UplinkProcess( );
+    char payload[] = "Hello world!"; 
+    printf("Sending payload: %s",payload);
+    UplinkProcess( sizeof(payload), payload );
+    LmHandlerProcess( );
+    // Array of test data
+    // int data_remaining = 1
+    // while (data_remaining) {
+    //     send_data(data)
+    // }
 
         // CRITICAL_SECTION_BEGIN( );
         // if( IsMacProcessPending == 1 )
@@ -434,10 +442,11 @@ static void OnSysTimeUpdate( void )
 /*!
  * Prepares the payload of the frame and transmits it.
  */
-static void PrepareTxFrame( void )
+static void PrepareTxFrame( uint8_t size, char buffer[] )
 {
     if( LmHandlerIsBusy( ) == true )
     {
+        printf("LmHander busy!\n");
         return;
     }
 
@@ -445,12 +454,14 @@ static void PrepareTxFrame( void )
 
     AppData.Port = LORAWAN_APP_PORT;
 
-    CayenneLppReset( );
-    CayenneLppAddDigitalInput( channel++, AppLedStateOn );
-    CayenneLppAddAnalogInput( channel++, BoardGetBatteryLevel( ) * 100 / 254 );
+    // CayenneLppReset( );
+    // CayenneLppAddDigitalInput( channel++, AppLedStateOn );
+    // CayenneLppAddAnalogInput( channel++, BoardGetBatteryLevel( ) * 100 / 254 );
 
-    CayenneLppCopy( AppData.Buffer );
-    AppData.BufferSize = CayenneLppGetSize( );
+    // CayenneLppCopy( AppData.Buffer );
+    // AppData.BufferSize = CayenneLppGetSize( );
+    AppData.BufferSize = size;
+    AppData.Buffer = buffer;
 
     if( LmHandlerSend( &AppData, LmHandlerParams.IsTxConfirmed ) == LORAMAC_HANDLER_SUCCESS )
     {
@@ -481,7 +492,7 @@ static void StartTxProcess( LmHandlerTxEvents_t txEvent )
     }
 }
 
-static void UplinkProcess( void )
+static void UplinkProcess( uint8_t size, char buffer[] )
 {
     uint8_t isPending = 0;
     CRITICAL_SECTION_BEGIN( );
@@ -490,7 +501,7 @@ static void UplinkProcess( void )
     CRITICAL_SECTION_END( );
     if( isPending == 1 )
     {
-        PrepareTxFrame( );
+        PrepareTxFrame( size, buffer );
     }
 }
 
