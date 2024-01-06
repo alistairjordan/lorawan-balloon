@@ -107,8 +107,8 @@ The initial prototype can be seen in the images below.
 * [_COMPLETED_] GPS Works, gpsd installed.
 * [_COMPLETED_] CI/CD Works.
 * [_TESTING_] WSPR CLI Interface.
-* [_IN PROGRESS_] LoraWan MAC to IPv4 Bridge.
-* [_IN_PROGRESS_] Implement SPIDEV compatibility with Semtec LoraMac-Node rather than 3rd party drivers.
+* [_IN_PROGRESS_] LoraWan MAC to IPv4 Bridge.
+* [_TESTING_] Implement SPIDEV compatibility with Semtec LoraMac-Node rather than 3rd party drivers.
 * [_TODO_] CSI Camera Interface with CSI/MIPI camera.
 * [_TODO_] Camera Images to Lorawan Packets using SSDV.
 * [_TODO_] "Glue" shell scripts to tack everything together.
